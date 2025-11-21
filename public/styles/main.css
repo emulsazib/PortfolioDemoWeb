@@ -214,8 +214,12 @@ body[data-theme='dark'] .theme-toggle__icon:last-child {
 }
 
 .hero__visual img {
+  /* Make the profile image a responsive square crop */
   width: 100%;
+  aspect-ratio: 1 / 1;
   height: auto;
+  object-fit: cover;
+  display: block;
 }
 
 .hero__visual figcaption {
