@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Modern full-stack portfolio with an Express backend, data-driven sections, and dark/light themes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/styles/main.css" />
+  <title>Portfolio</title>
+</head>
+
+<body>
+  <div class="noise"></div>
+  <header class="site-header">
+    <nav class="nav">
+      <div class="brand">
+        <span class="dot"></span>
+        <div>
+          <p class="eyebrow">Portfolio</p>
+          <p class="name">Emul Sajib</p>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button class="ghost-btn" data-scroll="#projects">Projects</button>
+        <button class="ghost-btn" data-scroll="#timeline">Timeline</button>
+        <button class="ghost-btn" data-scroll="#contact">Contact</button>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle color theme">
+          <span class="theme-toggle__icon">🌞</span>
+          <span class="theme-toggle__icon">🌙</span>
+        </button>
+      </div>
+    </nav>
+    <section class="hero">
+      <div class="hero__content">
+        <p class="eyebrow">Product-minded • End-to-end Delivery</p>
+        <h1>Engineering the experiences teams ship every week.</h1>
+        <p class="lede">
+          I craft accessible, fast, and resilient web apps — pairing calm UX with reliable APIs so your roadmap can
+          move without drama.
+        </p>
+        <div class="hero__actions">
+          <a class="primary-btn" href="#projects">See selected work</a>
+          <a class="secondary-btn" href="#contact">Book a call</a>
+        </div>
+      </div>
+      <figure class="hero__visual">
+        <img src="/images/profile.jpg" alt="Portrait of Emul Sajib" loading="lazy">
+        <figcaption>Currently shipping delightful experiences with modern stacks.</figcaption>
+      </figure>
+    </section>
+  </header>
+
+  <main>
+    <section class="panel panel--accent" id="summary">
+      <div class="panel__badge">01 • Summary</div>
+      <div class="panel__grid">
+        <div>
+          <h2>Trusted by fast-moving teams.</h2>
+          <p class="lede" id="summary-headline">
+            Product-minded Full-Stack Developer
+          </p>
+        </div>
+        <p id="summary-blurb">
+          I help founders and teams ship delightful user experiences by combining thoughtful UX, performant frontends,
+          and reliable APIs.
+        </p>
+      </div>
+    </section>
+
+    <section class="panel" id="projects">
+      <div class="panel__badge">02 • Projects</div>
+      <div class="panel__header">
+        <h2>Selected Work</h2>
+        <p class="lede">API-powered cards update automatically from the Express backend.</p>
+      </div>
+      <div class="projects-grid" id="projects-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="panel panel--accent" id="timeline">
+      <div class="panel__badge">03 • Timeline</div>
+      <div class="panel__header">
+        <h2>Momentum Highlights</h2>
+        <p class="lede">Recent milestones across platform, people, and product.</p>
+      </div>
+      <ol class="timeline" id="timeline-list"></ol>
+    </section>
+
+    <section class="panel panel--split" id="contact">
+      <div>
+        <div class="panel__badge">04 • Contact</div>
+        <h2>Let’s build something people love.</h2>
+        <p class="lede">Reach out with a prompt and we’ll scope next steps within 24 hours.</p>
+        <ul class="contact-meta">
+          <li><strong>Location</strong><span>Jessore, Khulna</span></li>
+          <li><strong>Email</strong><a href="mailto:emul.shajib742@gmail.com">emul.shajib742@gmail.com</a></li>
+          <li><strong>Phone</strong><a href="tel:+8801613006664">+880 1613 006 664</a></li>
+        </ul>
+      </div>
+      <form class="contact-form" id="contact-form" novalidate>
+        <label>
+          Name
+          <input type="text" name="name" placeholder="Ada Lovelace" required>
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" placeholder="you@domain.com" required>
+        </label>
+        <label>
+          Project details
+          <textarea name="message" rows="4" placeholder="Timeline, goals, and constraints..." required></textarea>
+        </label>
+        <button class="primary-btn" type="submit">Send message</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Portfolio · Crafted with Express + vanilla JS</p>
+    <div class="footer-actions">
+      <a href="https://github.com/emulsazib" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="/scripts/main.js" type="module"></script>
+</body>
+
+</html>

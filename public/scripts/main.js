@@ -1,0 +1,162 @@
+const body = document.body;
+const themeToggle = document.getElementById('theme-toggle');
+const projectsGrid = document.getElementById('projects-grid');
+const timelineList = document.getElementById('timeline-list');
+const summaryHeadline = document.getElementById('summary-headline');
+const summaryBlurb = document.getElementById('summary-blurb');
+const contactForm = document.getElementById('contact-form');
+const formStatus = document.getElementById('form-status');
+const YEAR = document.getElementById('year');
+const SCROLL_BTNS = document.querySelectorAll('[data-scroll]');
+
+const STORAGE_KEY = 'portfolio-theme';
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+init();
+
+function init() {
+  YEAR.textContent = new Date().getFullYear();
+  initTheme();
+  wireNavigation();
+  hydrateFromApi();
+  initForm();
+}
+
+function initTheme() {
+  const savedTheme = localStorage.getItem(STORAGE_KEY);
+  const initialTheme = savedTheme || (prefersDark.matches ? 'dark' : 'light');
+  setTheme(initialTheme);
+  prefersDark.addEventListener('change', (event) => {
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      setTheme(event.matches ? 'dark' : 'light');
+    }
+  });
+  themeToggle?.addEventListener('click', () => {
+    const nextTheme = body.dataset.theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    localStorage.setItem(STORAGE_KEY, nextTheme);
+  });
+}
+
+function setTheme(theme) {
+  body.dataset.theme = theme;
+}
+
+function wireNavigation() {
+  SCROLL_BTNS.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = document.querySelector(btn.dataset.scroll);
+      if (!target) return;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
+async function hydrateFromApi() {
+  try {
+    const [summary, projects, timeline] = await Promise.all([
+      fetchJson('/api/summary'),
+      fetchJson('/api/projects'),
+      fetchJson('/api/timeline'),
+    ]);
+
+    renderSummary(summary);
+    renderProjects(projects?.projects || []);
+    renderTimeline(timeline?.timeline || []);
+  } catch (error) {
+    console.error('Failed to load API data', error);
+    renderErrorState();
+  }
+}
+
+async function fetchJson(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return response.json();
+}
+
+function renderSummary(summary) {
+  if (!summary) return;
+  summaryHeadline.textContent = summary.headline;
+  summaryBlurb.textContent = summary.blurb;
+}
+
+function renderProjects(list) {
+  if (!list.length) {
+    projectsGrid.innerHTML = '<p>No projects found. Check back soon.</p>';
+    return;
+  }
+
+  projectsGrid.innerHTML = list
+    .map(
+      ({ title, description, stack, link }) => `
+        <article class="project-card">
+          <div>
+            <p class="eyebrow">${stack[0] || 'Project'}</p>
+            <h3>${title}</h3>
+            <p>${description}</p>
+          </div>
+          <ul>
+            ${stack.map((tech) => `<li>${tech}</li>`).join('')}
+          </ul>
+          <a href="${link}" target="_blank" rel="noreferrer">View details →</a>
+        </article>
+      `,
+    )
+    .join('');
+}
+
+function renderTimeline(list) {
+  if (!list.length) {
+    timelineList.innerHTML = '<li>Timeline coming soon.</li>';
+    return;
+  }
+
+  timelineList.innerHTML = list
+    .map(
+      ({ year, milestone }) => `
+        <li>
+          <time>${year}</time>
+          <p>${milestone}</p>
+        </li>
+      `,
+    )
+    .join('');
+}
+
+function renderErrorState() {
+  const message = '<p class="form-status">Unable to load data from the server. Please refresh.</p>';
+  projectsGrid.innerHTML = message;
+  timelineList.innerHTML = message;
+}
+
+function initForm() {
+  contactForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    formStatus.textContent = 'Sending...';
+
+    const formData = new FormData(contactForm);
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong');
+      }
+
+      formStatus.textContent = data.message;
+      contactForm.reset();
+    } catch (error) {
+      console.error(error);
+      formStatus.textContent = error.message;
+    }
+  });
+}
