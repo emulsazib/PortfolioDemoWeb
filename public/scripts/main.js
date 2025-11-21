@@ -15,11 +15,15 @@ const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 init();
 
 function init() {
-  YEAR.textContent = new Date().getFullYear();
+  if (YEAR) YEAR.textContent = new Date().getFullYear();
   initTheme();
   wireNavigation();
-  hydrateFromApi();
-  initForm();
+  highlightActiveNav();
+  // Only hydrate API data if on home page
+  if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+    hydrateFromApi();
+    initForm();
+  }
 }
 
 function initTheme() {
@@ -78,12 +82,13 @@ async function fetchJson(url) {
 }
 
 function renderSummary(summary) {
-  if (!summary) return;
+  if (!summary || !summaryHeadline || !summaryBlurb) return;
   summaryHeadline.textContent = summary.headline;
   summaryBlurb.textContent = summary.blurb;
 }
 
 function renderProjects(list) {
+  if (!projectsGrid) return;
   if (!list.length) {
     projectsGrid.innerHTML = '<p>No projects found. Check back soon.</p>';
     return;
@@ -109,6 +114,7 @@ function renderProjects(list) {
 }
 
 function renderTimeline(list) {
+  if (!timelineList) return;
   if (!list.length) {
     timelineList.innerHTML = '<li>Timeline coming soon.</li>';
     return;
@@ -128,12 +134,30 @@ function renderTimeline(list) {
 
 function renderErrorState() {
   const message = '<p class="form-status">Unable to load data from the server. Please refresh.</p>';
-  projectsGrid.innerHTML = message;
-  timelineList.innerHTML = message;
+  if (projectsGrid) projectsGrid.innerHTML = message;
+  if (timelineList) timelineList.innerHTML = message;
+}
+
+function highlightActiveNav() {
+  const currentPath = window.location.pathname;
+  const navLinks = document.querySelectorAll('.nav-actions .ghost-btn');
+  
+  navLinks.forEach((link) => {
+    link.classList.remove('active');
+    const href = link.getAttribute('href');
+    
+    if (currentPath === '/' && href === '/') {
+      link.classList.add('active');
+    } else if (currentPath === href || (currentPath.startsWith(href) && href !== '/')) {
+      link.classList.add('active');
+    }
+  });
 }
 
 function initForm() {
-  contactForm?.addEventListener('submit', async (event) => {
+  if (!contactForm || !formStatus) return;
+  
+  contactForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     formStatus.textContent = 'Sending...';
 

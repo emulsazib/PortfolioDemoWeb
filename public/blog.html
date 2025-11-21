@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="My blog posts and thoughts on development and technology." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/styles/main.css" />
+  <title>Blog - Portfolio</title>
+</head>
+
+<body>
+  <div class="noise"></div>
+  <header class="site-header">
+    <nav class="nav">
+      <div class="brand">
+        <span class="dot"></span>
+        <div>
+          <p class="eyebrow">Portfolio</p>
+          <p class="name">Emul Sajib</p>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <a href="/" class="ghost-btn">Home</a>
+        <a href="/projects" class="ghost-btn">Projects</a>
+        <a href="/achievements" class="ghost-btn">Achievements</a>
+        <a href="/blog" class="ghost-btn active">Blog</a>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle color theme">
+          <span class="theme-toggle__icon">🌞</span>
+          <span class="theme-toggle__icon">🌙</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="panel__badge">Blog</div>
+      <div class="panel__header">
+        <h1>My Blog</h1>
+        <p class="lede">Thoughts, tutorials, and insights on development and technology.</p>
+      </div>
+      <div class="blog-grid" id="blog-grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Portfolio · Crafted with Express + vanilla JS</p>
+    <div class="footer-actions">
+      <a href="https://github.com/emulsazib" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="/scripts/main.js" type="module"></script>
+  <script src="/scripts/blog.js" type="module"></script>
+</body>
+
+</html>
+
